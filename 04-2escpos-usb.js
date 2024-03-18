@@ -1,4 +1,4 @@
-// 也是需要打印機測試
+// 也是需要打印機測試  成功
 const escpos = require('escpos');
 // install escpos-usb adapter module manually
 escpos.USB = require('escpos-usb');
@@ -8,11 +8,13 @@ const device  = new escpos.USB();
 // const device  = new escpos.Network('localhost');
 // const device  = new escpos.Serial('/dev/usb/lp0');
 
-const options = { encoding: "GB18030" /* default */ }
+const options = { encoding: "GB18030" /* default 這段是用來包含中文編碼的 */ }
 // encoding is optional
 
 const printer = new escpos.Printer(device, options);
+console.log(printer);
 
+// 下面會出錯
 device.open(function(error){
   printer
   .font('a')

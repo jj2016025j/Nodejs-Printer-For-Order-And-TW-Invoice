@@ -1,6 +1,6 @@
 // 可以找到所有設備  但後面對設備進行操作會有權限問題
 // node 02list-usb.js
-
+// 裝了驅動還是有連線問題
 
 const usb = require('usb');
 

@@ -1,0 +1,4 @@
+nvm list available
+查看可用版本
+nvm install 0.11.13
+nvm use 0.11.13

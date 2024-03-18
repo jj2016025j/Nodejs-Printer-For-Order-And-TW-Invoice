@@ -1,9 +1,9 @@
-// 找的到usb 但是15行後面的寫法可能跟庫不一樣，好像是驅動或權限不足
+// 找的到usb 但是15行後面的寫法可能跟庫不一樣，好像是驅動或權限不足 用VID跟PID找不到
 const usb = require('usb');
 
 // 通过VID和PID找到打印机，这些值你需要从你的打印机文档或设备管理器中获取
-const PRINTER_VID = 3010; // 示例VID，请替换成你的打印机VID
-const PRINTER_PID = 44085; // 示例PID，请替换成你的打印机PID
+const PRINTER_VID = "1FC9"; // 示例VID，请替换成你的打印机VID
+const PRINTER_PID = "2016"; // 示例PID，请替换成你的打印机PID
 
 const device = usb.findByIds(PRINTER_VID, PRINTER_PID);
 
