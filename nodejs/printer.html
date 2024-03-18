@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #printArea,
+            #printArea * {
+                visibility: visible;
+            }
+
+            #printArea {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="elem">列印測試</div>
+    <div id="contentToPrint">
+        <h2>打印这部分内容</h2>
+        <p>这是一些示例文本，说明了要打印的内容。</p>
+        <!-- 其他您想要打印的内容 -->
+    </div>
+
+    <script>
+        
+        window.print()
+
+        function printElement(elem) {
+            let printWindow = window.open('', 'PRINT', 'height=600,width=800');
+
+            printWindow.document.write('<html><head><title>' + document.title + '</title>');
+            printWindow.document.write('</head><body >');
+            printWindow.document.write(elem.innerHTML);
+            printWindow.document.write('</body></html>');
+
+            printWindow.document.close(); // 注意：在 IE 中可能需要使用 printWindow.close();
+            printWindow.focus();
+
+            // setTimeout(function () {
+            //     printWindow.print();
+            //     printWindow.close();
+            // }, 1000);
+        }
+
+        // printElement(elem)
+        function printTheContent() {
+            const elem = document.getElementById('contentToPrint');
+            printElement(elem);
+        }
+    </script>
+        <button onclick="printTheContent()">打印内容</button>
+
+</body>
+
+</html>

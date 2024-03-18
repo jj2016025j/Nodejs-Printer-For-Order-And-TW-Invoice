@@ -1,0 +1,28 @@
+    // 這不知道哪來的
+    // EPSON
+    // STAR
+    // BIXOLON
+    // CITIZEN
+    // CUSTOM
+    // SEWOO
+    // GENERIC
+
+    // console.log(PrinterTypes);
+    // {
+    //     EPSON: 'epson',
+    //     TANCA: 'tanca',
+    //     STAR: 'star',
+    //     DARUMA: 'daruma',
+    //     BROTHER: 'brother'
+    //   }
+
+    interface: "COM3" // Windows示例
+    interface: "tcp://192.168.1.100"
+    tcp://192.168.0.99:9100
+    interface: "usb://VID:PID"
+    // 或者，如果库支持，直接使用打印机名称
+    interface: "usb://Your_Printer_Name"
+    interface: "bluetooth://000D3A123456"
+printer:auto
+    printer:My Printer  Name
+    \\.\COM1

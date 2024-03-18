@@ -1,0 +1,32 @@
+npm install github:tojocky/node-printer
+
+更新到printer支援的版本又說版本太舊
+最新版又說太新不能用
+還是算了吧:D
+
+python --version
+Python 3.9.13
+
+node --version
+v21.6.1
+
+npm list -g nw
+
+nvm install 0.8.28
+nvm use 0.8.28
+
+//忽略peer依赖冲突
+npm install --legacy-peer-deps
+
+//强制
+npm install --force
+
+來自 Windows 和 POSIX（使用CUPS 1.4/MAC OS X 10.6）API 的本機方法包裝器；
+與節點 v0.8.x、0.9.x 和 v0.11.x 相容（0.11.9 和 0.11.13）；
+與node-webkit v0.8.x和0.9.2相容；
+如何安裝：
+確保您的系統上安裝了 Python 2.x。Windows 用戶也需要 Visual Studio（2013 Express 很適合）
+如何將版本降至跟此函式庫可用的版本
+我是windows11
+
+直接安裝會不會導致原本的python被蓋過??
