@@ -1,0 +1,54 @@
+各種連接打印機套件
+
+###node
+
+escpos
+https://www.npmjs.com/package/escpos
+escpos-usb Zadig WinUSB
+escpos-network
+
+node-printer
+https://www.npmjs.com/package/printer
+
+node-thermal-printer
+https://www.npmjs.com/package/node-thermal-printer
+
+
+###python
+pyusb、libusb、escpos libusb、libusbx、libusb-win32或openusb
+qrcode reportlab PyUSB PySerial python-escpos
+
+00mockPrinterServer.js
+// 架設服務器 OK
+
+01test-network.js
+// 測試net OK
+
+02list-usb.js
+// 可以找到所有設備 OK
+
+03networkPrinter.js
+// net 網路接口 需要有打印機才能測試是否成功
+
+04escpos-usb-test.js
+// usb 要有打印機才能測試
+
+05find-one-usb.js
+// 可以找到設備 但庫裡面的usb庫版本不符合 無法使用
+
+06usb-printer.js
+// 找的到usb 但是15行後面的寫法可能跟庫不一樣，好像是驅動或權限不足
+
+https://github.com/song940/node-escpos?tab=readme-ov-file
+// escpos各種連接方式
+const usbDevice = new escpos.USB();
+const usbPrinter = new escpos.Printer(usbDevice);
+
+const serialDevice = new escpos.Serial('/dev/usb/lp0');
+const serialPrinter = new escpos.Printer(serialDevice);
+
+const bluetoothDevice = new escpos.Bluetooth('01:23:45:67:89:AB', 1);
+const bluetoothPrinter = new escpos.Printer(bluetoothDevice);
+
+const networkDevice = new escpos.Network('localhost');
+const networkPrinter = new escpos.Printer(networkDevice);
