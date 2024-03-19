@@ -1,8 +1,7 @@
-const Jimp = require('jimp');
 const escpos = require('escpos');
 escpos.USB = require('escpos-usb');
+const Jimp = require('jimp');
 const qr = require('qr-image');
-
 const streamToBuffer = require('stream-to-buffer');
 const fs = require('fs');
 
@@ -26,17 +25,13 @@ async function mergeQRCodes(qr1, qr2) {
     return mergedImage;
 }
 
-async function printMergedQRCodes(url1, url2) {
+async function printMergedQRCodes(device, printer, url1, url2) {
     const qr1 = await createQRCode(url1, 5);
     const qr2 = await createQRCode(url2, 5);
     const mergedImage = await mergeQRCodes(qr1, qr2);
 
     const outputPath = 'output.png';
     await mergedImage.writeAsync(outputPath);
-
-    const device = new escpos.USB();
-    const options = { encoding: "GB18030" /* Or other encoding that suits your needs */ };
-    const printer = new escpos.Printer(device, options);
 
     device.open(function () {
         escpos.Image.load(outputPath, function (image) {
@@ -46,4 +41,8 @@ async function printMergedQRCodes(url1, url2) {
     });
 }
 
-printMergedQRCodes('https://lee871116.ddns.net', 'https://lee871116.ddns.net').catch(console.error);
+const device = new escpos.USB();
+const options = { encoding: "Big5", width: 42 }
+const printer = new escpos.Printer(device, options);
+
+printMergedQRCodes(device, printer, 'https://lee871116.ddns.net', 'https://lee871116.ddns.net').catch(console.error);
