@@ -1,4 +1,4 @@
-// 大小成功 內容成功 排版失敗
+// 大小成功 內容成功 排版失敗 可以印的 size: 5 大約1.5公分
 const escpos = require('escpos');
 escpos.USB = require('escpos-usb');
 

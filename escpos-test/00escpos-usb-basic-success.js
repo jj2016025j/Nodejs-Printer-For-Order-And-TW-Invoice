@@ -1,4 +1,4 @@
-// 需要打印機測試  成功
+// 成功
 const escpos = require('escpos');
 escpos.USB = require('escpos-usb');
 // 這裡就會找不到打印機了
@@ -14,11 +14,11 @@ device.open(function (error) {
     .align('ct')
     .style('bu')
     .size(1, 1)
-    // .text('The quick brown fox jumps over the lazy dog')
-    // .text('嘿!成功了!我要測試寬度我要測試寬度')
-    // .feed(3)
-    // .text('嘿!跳行成功了!')
-    // .barcode('1234567', 'EAN8')
+    .text('The quick brown fox jumps over the lazy dog')
+    .text('嘿!成功了!')
+    .feed(3)
+    .text('嘿!跳行成功了!')
+    .barcode('1234567', 'EAN8')
     .table(["樺", "Two", "陞"])
     .tableCustom(
       [
@@ -28,8 +28,6 @@ device.open(function (error) {
       ],
       { encoding: 'cp857', size: [1, 1] } // Optional
     )
-    // .qrimage('https://lee871116.ddns.net', function(err){
-    //   this.cut();
+    // this.cut();
     .close();
-  // });
 });
