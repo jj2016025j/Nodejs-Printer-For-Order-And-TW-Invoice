@@ -1,40 +1,35 @@
-// 也是需要打印機測試  成功
+// 需要打印機測試  成功
 const escpos = require('escpos');
-// install escpos-usb adapter module manually
 escpos.USB = require('escpos-usb');
-// Select the adapter based on your printer type
 // 這裡就會找不到打印機了
-const device  = new escpos.USB();
+const device = new escpos.USB();
 // const device  = new escpos.Network('localhost');
 // const device  = new escpos.Serial('/dev/usb/lp0');
-
-const options = { encoding: "GB18030" /* default 這段是用來包含中文編碼的 */ }
-// encoding is optional
-
+const options = { encoding: "Big5", width: 42 }
 const printer = new escpos.Printer(device, options);
-console.log(printer);
 
-// 下面會出錯
-device.open(function(error){
+device.open(function (error) {
   printer
-  .font('a')
-  .align('ct')
-  .style('bu')
-  .size(1, 1)
-  .text('The quick brown fox jumps over the lazy dog')
-  .text('敏捷的棕色狐狸跳过懒狗')
-  .barcode('1234567', 'EAN8')
-  .table(["One", "Two", "Three"])
-  .tableCustom(
-    [
-      { text:"Left", align:"LEFT", width:0.33, style: 'B' },
-      { text:"Center", align:"CENTER", width:0.33},
-      { text:"Right", align:"RIGHT", width:0.33 }
-    ],
-    { encoding: 'cp857', size: [1, 1] } // Optional
-  )
-  .qrimage('https://github.com/song940/node-escpos', function(err){
-    this.cut();
-    this.close();
-  });
+    .font('a')
+    .align('ct')
+    .style('bu')
+    .size(1, 1)
+    // .text('The quick brown fox jumps over the lazy dog')
+    // .text('嘿!成功了!我要測試寬度我要測試寬度')
+    // .feed(3)
+    // .text('嘿!跳行成功了!')
+    // .barcode('1234567', 'EAN8')
+    .table(["樺", "Two", "陞"])
+    .tableCustom(
+      [
+        { text:"Left", align:"LEFT", width:0.33, style: 'B' },
+        { text:"Center", align:"CENTER", width:0.33},
+        { text:"Right", align:"RIGHT", width:0.33 }
+      ],
+      { encoding: 'cp857', size: [1, 1] } // Optional
+    )
+    // .qrimage('https://lee871116.ddns.net', function(err){
+    //   this.cut();
+    .close();
+  // });
 });

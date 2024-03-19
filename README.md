@@ -1,26 +1,24 @@
 # Printer
  
-安裝z
+要把escpos裡面出錯的程式碼刪掉
+
+安裝zadig
 選擇對應的發票機USB孔
 安裝winUSB驅動
 
-// 也是需要打印機測試  成功
+編碼要用Big5
+這些都會出亂碼GB18030 UTF-8
+
 const escpos = require('escpos');
-// install escpos-usb adapter module manually
 escpos.USB = require('escpos-usb');
-// Select the adapter based on your printer type
-// 這裡就會找不到打印機了
 const device  = new escpos.USB();
 // const device  = new escpos.Network('localhost');
 // const device  = new escpos.Serial('/dev/usb/lp0');
 
-const options = { encoding: "GB18030" /* default */ }
-// encoding is optional
+const options = { encoding: "GB18030"}
 
 const printer = new escpos.Printer(device, options);
-console.log(printer);
 
-// 下面會出錯
 device.open(function(error){
   printer
   .font('a')
@@ -44,34 +42,3 @@ device.open(function(error){
     this.close();
   });
 });
-
-// 要有打印機才能測試 成功
-const escpos = require('escpos');
-escpos.USB = require('escpos-usb');
-
-// 选择USB打印机
-const device = new escpos.USB();
-
-// 创建打印机对象
-const printer = new escpos.Printer(device);
-
-// device.open(function(error){
-//   printer
-//     .font('a') // 选择字体
-//     .align('ct') // 居中对齐
-//     .style('bu') // 字体样式：粗体+下划线
-//     .size(1, 1) // 字体大小
-//     .text('Hello, World!') // 打印文本
-//     .cut() // 切纸
-//     .close(); // 关闭打印机连接
-// });
-
-device.open(function(error){
-  printer
-    .font('a') // 选择字体
-    .align('ct') // 居中对齐
-    .style('bu') // 字体样式：粗体+下划线
-    .size(1, 1) // 字体大小
-    .close(); // 关闭打印机连接
-});
- 
