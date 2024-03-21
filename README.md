@@ -1,44 +1,29 @@
 # Printer
  
-要把escpos裡面出錯的程式碼刪掉
+這是一個node.js的打印機操作腳本
+主要有三個功能
+打印訂單桌號QRCODE
+打印訂單內容
+打印台灣的電子發票
+
+只要輸入 node app.js 就可以使用
+
+除錯方式:
+
+要把escpos庫裡面index.js出錯的程式碼刪掉
+on(d開頭的)
 
 安裝zadig
-選擇對應的發票機USB孔
+應該是這個
+https://zadig.akeo.ie/
+打開執行檔
+選擇options
+選擇All List Devices
+通常會自動幫你選擇已經安裝的打印機
+如果沒有就選擇對應的打印機選項
 安裝winUSB驅動
+裝完就可以了
 
 編碼要用Big5
-這些都會出亂碼GB18030 UTF-8
-
-const escpos = require('escpos');
-escpos.USB = require('escpos-usb');
-const device  = new escpos.USB();
-// const device  = new escpos.Network('localhost');
-// const device  = new escpos.Serial('/dev/usb/lp0');
-
-const options = { encoding: "GB18030"}
-
-const printer = new escpos.Printer(device, options);
-
-device.open(function(error){
-  printer
-  .font('a')
-  .align('ct')
-  .style('bu')
-  .size(1, 1)
-  .text('The quick brown fox jumps over the lazy dog')
-  .text('敏捷的棕色狐狸跳过懒狗')
-  .barcode('1234567', 'EAN8')
-  .table(["One", "Two", "Three"])
-  .tableCustom(
-    [
-      { text:"Left", align:"LEFT", width:0.33, style: 'B' },
-      { text:"Center", align:"CENTER", width:0.33},
-      { text:"Right", align:"RIGHT", width:0.33 }
-    ],
-    { encoding: 'cp857', size: [1, 1] } // Optional
-  )
-  .qrimage('https://github.com/song940/node-escpos', function(err){
-    this.cut();
-    this.close();
-  });
-});
+以下這些都會出亂碼:
+GB18030 UTF-8
