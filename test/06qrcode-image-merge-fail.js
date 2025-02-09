@@ -24,7 +24,7 @@ async function mergeQRCodes(qr1, qr2) {
     mergedImage.blit(qr2, qr1.bitmap.width, 0);
     return mergedImage;
 }
-const content = 'https://lee871116.ddns.net'
+const content = 'https://github.com/jj2016025j/'
 
 async function printMergedQRCodes() {
     const qr1 = await createQRCode(content, 5);
