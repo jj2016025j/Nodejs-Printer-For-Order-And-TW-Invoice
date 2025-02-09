@@ -55,7 +55,7 @@ async function printInvoice(invoiceData) {
         escpos.Image.load(outputPath, function (image) {
             printer
                 .raster(image)
-                .cut()
+                // .cut()
                 .font(`a`)
                 .align(`lt`)
                 .size(0, 0)
@@ -81,7 +81,7 @@ async function printInvoice(invoiceData) {
 
             printer
                 .feed(2)
-                .cut()
+                // .cut()
                 .close()
         });
 

@@ -52,7 +52,7 @@ function testFormatInvoiceItems() {
         { name: 'LED顯示器', quantity: 1, unitPrice: 5000, totalPrice: 5000 },
         { name: '無線鍵盤', quantity: 2, unitPrice: 700, totalPrice: 1400 }
     ];
-    const result = TextUtils.formatInvoiceItems(items);
+    const result = InvoiceUtils.formatInvoiceItems(items);
     if (!result.includes("LED顯示器") || !result.includes("無線鍵盤")) {
         throw new Error("❌ formatInvoiceItems() 失敗: 缺少預期文本");
     }
@@ -88,22 +88,22 @@ async function testQRCodeUtils() {
     // 測試 1: 生成單個 QR 碼
     console.log("🟢 生成單個 QR 碼...");
     const qrImage = await QRCodeUtils.createQRCode('https://example.com', 5);
-    await qrImage.writeAsync('tests/test_qr.png');
-    if (!fs.existsSync('tests/test_qr.png')) {
+    await qrImage.writeAsync('test_qr.png');
+    if (!fs.existsSync('test_qr.png')) {
         throw new Error("❌ 單個 QR 碼未成功生成");
     }
-    console.log("✅ 單個 QR 碼已生成: tests/test_qr.png");
+    console.log("✅ 單個 QR 碼已生成: test_qr.png");
 
     // 測試 2: 生成並合併兩個 QR 碼
     console.log("🟢 生成並合併兩個 QR 碼...");
     const qr1 = await QRCodeUtils.createQRCode('https://left-url.com', 5);
     const qr2 = await QRCodeUtils.createQRCode('https://right-url.com', 5);
     const mergedImage = await QRCodeUtils.mergeQRCodes(qr1, qr2);
-    await mergedImage.writeAsync('tests/merged_qr.png');
-    if (!fs.existsSync('tests/merged_qr.png')) {
+    await mergedImage.writeAsync('merged_qr.png');
+    if (!fs.existsSync('merged_qr.png')) {
         throw new Error("❌ 合併 QR 碼未成功生成");
     }
-    console.log("✅ 合併 QR 碼已生成: tests/merged_qr.png");
+    console.log("✅ 合併 QR 碼已生成: merged_qr.png");
 }
 
 // **執行所有測試**
