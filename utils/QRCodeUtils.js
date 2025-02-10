@@ -50,7 +50,7 @@ class QRCodeUtils {
       const leftQR = await this.createQRCode(leftText, size);
       const rightQR = await this.createQRCode(rightText, size);
       const mergedImage = await this.mergeQRCodes(leftQR, rightQR);
-      const outputPath = 'output.png';
+      const outputPath = 'merged_qr_output.png';
       await mergedImage.writeAsync(outputPath);
       return outputPath;
     } catch (error) {
