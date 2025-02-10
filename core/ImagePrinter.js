@@ -2,7 +2,6 @@ const escpos = require('escpos');
 escpos.USB = require('escpos-usb');
 const PrinterHandler = require('./PrinterHandler');
 const QRCodeUtils = require('../utils/QRCodeUtils');
-const Jimp = require('jimp');
 
 class QRCodePrinter extends PrinterHandler {
     async printImage(imagePath) {
