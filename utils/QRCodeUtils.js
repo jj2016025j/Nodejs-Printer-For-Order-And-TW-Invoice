@@ -15,7 +15,7 @@ class QRCodeUtils {
 
   static async generateSingleQRCode(url) {
       const qrImage = await QRCodeUtils.createQRCode(url);
-      const outputPath = 'single_qr.png';
+      const outputPath = 'src/single_qr.png';
       await qrImage.writeAsync(outputPath);
       return outputPath;
   }
@@ -31,7 +31,7 @@ class QRCodeUtils {
       const qr1 = await QRCodeUtils.createQRCode(url1);
       const qr2 = await QRCodeUtils.createQRCode(url2);
       const mergedImage = await QRCodeUtils.mergeQRCodes(qr1, qr2);
-      const outputPath = 'double_qr.png';
+      const outputPath = 'src/double_qr.png';
       await mergedImage.writeAsync(outputPath);
       return outputPath;
   }
