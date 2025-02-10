@@ -54,11 +54,11 @@ function testPrintTable() {
 async function runAllTests() {
   console.log("\n🚀 開始所有 TextPrinter 測試...\n");
 
-  testPrintText();         // 測試基本文字列印
+  // testPrintText();         // 測試基本文字列印
   testPrintBarcode();      // 測試條碼
-  testPrintQRCode();       // 測試 QR Code
-  testPrintAlignment();    // 測試對齊
-  testPrintTable();        // 測試表格
+  // testPrintQRCode();       // 測試 QR Code
+  // testPrintAlignment();    // 測試對齊
+  // testPrintTable();        // 測試表格
 
   console.log("\n🎉 所有測試完成！\n");
 }

@@ -7,32 +7,6 @@ const Jimp = require('jimp');
 class QRCodePrinter extends PrinterHandler {
     async printImage(imagePath) {
         return new Promise((resolve, reject) => {
-            Jimp.read(imagePath)
-                .then(image => {
-                    const maxWidth = 384; // 設定最大寬度為 384 像素（適應大多數熱感應打印機）
-                    const maxHeight = 384; // 設定最大寬度為 384 像素（適應大多數熱感應打印機）
-                    if (image.bitmap.width > maxWidth) {
-                        image = image.resize(maxWidth, Jimp.AUTO);
-                    }
-                    if (image.bitmap.height > maxHeight) {
-                        return
-                    }
-                    return image.greyscale().threshold({ max: 128 }).writeAsync(imagePath);
-                })
-                .then(() => {
-                    escpos.Image.load(imagePath, (image) => {
-                        this.printer.raster(image);
-                        this.printer.flush(() => {
-                            resolve();
-                        });
-                    });
-                })
-                .catch(reject);
-        });
-    }
-
-    async printImage(imagePath) {
-        return new Promise((resolve, reject) => {
             escpos.Image.load(imagePath, (image) => {
                 this.printer.raster(image);
                 this.printer.flush(() => {

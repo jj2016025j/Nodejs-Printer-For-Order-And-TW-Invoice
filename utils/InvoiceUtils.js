@@ -81,17 +81,17 @@ class InvoiceUtils {
 
   /**
    * 格式化商品資訊為表格形式
-   * @param {Array} items
+   * @param {Array} products
    * @returns {string}
    */
-  static formatInvoiceItems(items) {
+  static formatInvoiceItems(products) {
     let output = '名稱      數量  單價  總金額\n';
 
-    items.forEach(item => {
-      const name = this.calculatePadding(item.name, 12);
-      const quantity = this.calculatePadding(item.quantity.toString(), 4);
-      const unitPrice = this.calculatePadding(item.unitPrice.toString(), 8);
-      const totalPrice = item.totalPrice.toString();
+    products.forEach(product => {
+      const name = this.calculatePadding(product.name, 12);
+      const quantity = this.calculatePadding(product.quantity.toString(), 4);
+      const unitPrice = this.calculatePadding(product.unitPrice.toString(), 8);
+      const totalPrice = product.totalPrice.toString();
 
       output += `${name}${quantity}${unitPrice}${totalPrice}\n`;
     });

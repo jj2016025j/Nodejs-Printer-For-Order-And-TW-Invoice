@@ -2,6 +2,7 @@ const PrinterHandler = require('../core/PrinterHandler');
 const QRCodeUtils = require('../utils/QRCodeUtils');
 const InvoiceUtils = require('../utils/InvoiceUtils');
 const escpos = require('escpos');
+escpos.USB = require('escpos-usb');
 const Jimp = require('jimp');
 
 class InvoicePrinter extends PrinterHandler {
@@ -16,39 +17,60 @@ class InvoicePrinter extends PrinterHandler {
       const rightQRContent = `**:${invoiceData.selfUseArea}:${invoiceData.itemCount}:${invoiceData.itemCount}:${invoiceData.encoding}:${invoiceData.products}`;
       const barcodeContent = `${invoiceData.invoicePeriod}${invoiceData.invoiceNumber}${invoiceData.randomCode}`;
 
-      const outputPath = await QRCodeUtils.generateMergedQRCode(leftQRContent, rightQRContent);
-
-      this.openDevice((printer) => {
+      this.openDevice(async (printer) => {
         try {
-          const invoiceText = this.generateInvoiceText(invoiceData);
+          // printer
+          // .font('a')
+          // .align('lt')
+          // .size(1, 1)
+          // .font(`a`)
+          // .align(`lt`)
+          // .size(1, 1)
+          // .text(invoiceData.header)
+          // .style(`b`)// 加粗
+          // .size(1, 1)
+          // .text(`電子發票證明聯`)
+          // .size(1, 1)
+          // .text(` ${InvoiceUtils.convertInvoicePeriod(invoiceData.invoicePeriod)}`)
+          // .text(` ${invoiceData.invoiceNumber}`)
+          // .style(`NORMAL`)
+          // .size(0, 0)
+          // .text(`     ${invoiceData.dateTime}`)
+          // .text(InvoiceUtils.fillSpaces(`隨機碼:${invoiceData.randomCode}`, `總計${invoiceData.totalAmount}`, 22))
+          // .text(InvoiceUtils.fillSpaces(`賣方:${invoiceData.sellerId}`, `買方:${invoiceData.buyerId}`, 22))
+
+          // .barcode(barcodeContent, `CODE39`, {
+          //   width: 30,
+          //   height: 50, // 單位mm
+          //   includeParity: false //EAN13/EAN8 bar code
+          // })
+          
+          this.printDoubleQRCode(leftQRContent, rightQRContent)
+
+          // printer
+          //   .cut()
+          //   .font(`a`)
+          //   .align(`lt`)
+          //   .size(0, 0)
+          //   .text(`公司: ${invoiceData.companyInfo}`)
+          //   .style(`NORMAL`)
+          //   .text(`發票編號: ${invoiceData.invoiceNumber}`)
+          //   .text(`開票日期: ${InvoiceUtils.formatInvoiceDate(invoiceData.dateTime)}`)
+          //   .text(`統一編號: ${invoiceData.buyerId}`)
+          //   .text(`地址: ${invoiceData.address}`)
+          //   .text(`電話: ${invoiceData.phone}`)
+          //   .feed(1)
+          //   .text(`商品: `)
+
+          // InvoiceUtils.formatInvoiceItems(invoiceData.products);
 
           printer
-            .font('a')
-            .align('lt')
-            .size(1, 1)
-            .text(invoiceText)
-            .barcode(barcodeContent, 'CODE39', { width: 1, height: 50 });
-
-          if (outputPath) {
-            printer.raster(outputPath);
-          }
-
-          printer
-            .text(`公司: ${invoiceData.companyInfo}`)
-            .text(`發票編號: ${invoiceData.invoiceNumber}`)
-            .text(`地址: ${invoiceData.address}`)
-            .text(`電話: ${invoiceData.phone}`)
-            .feed(1)
-
-            .text('商品: ');
-
-          InvoiceUtils.printInvoiceItems(this.printer, invoiceData.items);
-
-          this.printer.feed(2)
-            .text(`商品總額: ${invoiceData.subTotal}`)
-            .text(`加值稅(10%): ${invoiceData.tax}`)
-            .text(`總計: ${invoiceData.total}`)
-            .feed(2)
+            // .feed(2)
+            // .text(`商品總額: ${invoiceData.subTotal}`)
+            // .text(`加值稅(10%): ${invoiceData.tax}`)
+            // .text(`總計: ${invoiceData.total}`)
+            // .feed(2)
+            // .flush()
             .close();
 
           console.log('✅ 發票打印完成');
@@ -64,51 +86,31 @@ class InvoicePrinter extends PrinterHandler {
   /**
    * 產生發票的 QR Code
    * @param {Object} invoiceData
-   * @returns {Promise<Jimp>} - 產生的 QR Code 影像
+   * @returns {Promise<string>} - 產生的 QR Code 圖片路徑
    */
   async generateInvoiceQRCode(invoiceData) {
     const leftQRContent = `${invoiceData.invoiceNumber}:${invoiceData.date}:${invoiceData.randomCode}:${invoiceData.salesAmount}:${invoiceData.totalAmount}:${invoiceData.buyerId}:${invoiceData.sellerId}:${invoiceData.encryptionInfo}`;
     const rightQRContent = `**:${invoiceData.selfUseArea}:${invoiceData.itemCount}:${invoiceData.itemCount}:${invoiceData.encoding}:${invoiceData.products}`;
 
-    return await QRCodeUtils.generateMergedQRCode(leftQRContent, rightQRContent);
+    return await QRCodeUtils.generateMergedQRCodes(leftQRContent, rightQRContent);
   }
 
-  /**
-   * 產生發票文字內容
-   * @param {Object} invoiceData
-   * @returns {string} - 發票內容
-   */
-  generateInvoiceText(invoiceData) {
-    return [
-      invoiceData.header,
-      '電子發票證明聯',
-      ` ${InvoiceUtils.convertInvoicePeriod(invoiceData.invoicePeriod)}`,
-      ` ${invoiceData.invoiceNumber}`,
-      `     ${invoiceData.dateTime}`,
-      InvoiceUtils.fillSpaces(`隨機碼:${invoiceData.randomCode}`, `總計${invoiceData.totalAmount}`, 32),
-      InvoiceUtils.fillSpaces(`賣方:${invoiceData.sellerId}`, `買方:${invoiceData.buyerId}`, 32),
-    ].join('\n');
+  async printDoubleQRCode(leftQRContent, rightQRContent) {
+    this.openDevice(async (printer) => {
+      const outputPath = await QRCodeUtils.generateMergedQRCodes(leftQRContent, rightQRContent).catch(console.error);
+      console.log('outputPath', outputPath);
+      await this.printImage(outputPath);
+      this.closeDevice();
+      console.log('打印完成');
+    });
   }
 
-  /**
-   * 轉換 Jimp 圖片為 escpos.Image
-   * @param {Jimp} jimpImage
-   * @returns {Promise<escpos.Image>}
-   */
-  async convertToEscposImage(jimpImage) {
+  async printImage(imagePath) {
     return new Promise((resolve, reject) => {
-      jimpImage.getBuffer(Jimp.MIME_PNG, (err, buffer) => {
-        if (err) {
-          console.error("❌ 轉換 Jimp 影像失敗:", err);
-          return reject(err);
-        }
-
-        escpos.Image.load(buffer, (err, escposImage) => {
-          if (err) {
-            console.error("❌ 轉換 escpos.Image 失敗:", err);
-            return reject(err);
-          }
-          resolve(escposImage);
+      escpos.Image.load(imagePath, (image) => {
+        this.printer.raster(image);
+        this.printer.flush(() => {
+          resolve();
         });
       });
     });
