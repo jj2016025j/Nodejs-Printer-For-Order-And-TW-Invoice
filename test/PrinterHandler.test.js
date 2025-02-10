@@ -30,24 +30,12 @@ function testOpenAndCloseDevice() {
   }
 }
 
-// 🟢 測試純文字列印
-function testPrintText() {
-  console.log("🟢 測試純文字列印...");
-  try {
-    printer.printText("🚀 測試純文字列印成功!");
-    console.log("✅ 純文字列印測試完成");
-  } catch (error) {
-    console.error("❌ 純文字列印測試失敗:", error.message);
-  }
-}
-
 // **執行所有測試**
 async function runAllTests() {
   console.log("\n🚀 開始所有 PrinterHandler 測試...\n");
 
   testInitializeDevice();
   testOpenAndCloseDevice();
-  testPrintText();
 
   console.log("\n🎉 所有測試完成！\n");
 }

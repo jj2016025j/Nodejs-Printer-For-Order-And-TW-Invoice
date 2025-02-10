@@ -1,50 +1,60 @@
 const escpos = require('escpos');
 escpos.USB = require('escpos-usb');
-const QRCodeUtils = require('../utils/QRCodeUtils');
 const PrinterHandler = require('./PrinterHandler');
+const QRCodeUtils = require('../utils/QRCodeUtils');
+const Jimp = require('jimp');
 
-class ImagePrinter extends PrinterHandler {
-  /**
-   * 產生並列印合併的 QR Code 圖片
-   * @param {string} leftQRContent - 左側 QR Code 內容
-   * @param {string} rightQRContent - 右側 QR Code 內容
-   */
-  async printMergedQRCodes(leftQRContent, rightQRContent) {
-    try {
-      const outputPath = await QRCodeUtils.generateMergedQRCode(leftQRContent, rightQRContent);
-      this.printImage(outputPath);
-    } catch (error) {
-      console.error('❌ 列印合併 QR Code 失敗:', error);
+class QRCodePrinter extends PrinterHandler {
+    async printImage(imagePath) {
+        return new Promise((resolve, reject) => {
+            Jimp.read(imagePath)
+                .then(image => {
+                    const maxWidth = 384; // 設定最大寬度為 384 像素（適應大多數熱感應打印機）
+                    if (image.bitmap.width > maxWidth) {
+                        image = image.resize(maxWidth, Jimp.AUTO);
+                    }
+                    return image.greyscale().threshold({ max: 128 }).writeAsync(imagePath);
+                })
+                .then(() => {
+                    escpos.Image.load(imagePath, (image) => {
+                        this.printer.raster(image);
+                        this.printer.flush(() => {
+                            resolve();
+                        });
+                    });
+                })
+                .catch(reject);
+        });
     }
-  }
 
-  /**
-   * 產生並列印單個 QR Code
-   * @param {string} qrContent - QR Code 內容
-   */
-  async printQRCode(qrContent) {
-    try {
-      const outputPath = await QRCodeUtils.createQRCode(qrContent);
-      this.printImage(outputPath);
-    } catch (error) {
-      console.error('❌ 列印 QR Code 失敗:', error);
+    async printQRCode(content) {
+        this.openDevice(async (printer) => {
+            const outputPath = await QRCodeUtils.generateSingleQRCode(content).catch(console.error);
+            console.log('outputPath', outputPath);
+            await this.printImage(outputPath);
+            this.closeDevice();
+            console.log('打印完成');
+        });
     }
-  }
 
-  /**
-   * 列印圖片
-   * @param {string} imagePath - 圖片路徑
-   */
-  printImage(imagePath) {
-    console.log("imagePath", imagePath)
-    this.openDevice((printer) => {
-      // console.log("printer", printer)
-      escpos.Image.load(imagePath, (image) => {
-        printer.raster(image).feed(2).close();
-        console.log('✅ 圖片列印完成');
-      });
-    });
-  }
+    async printDoubleQRCode(leftQRContent, rightQRContent) {
+        this.openDevice(async (printer) => {
+            const outputPath = await QRCodeUtils.generateMergedQRCodes(leftQRContent, rightQRContent).catch(console.error);
+            console.log('outputPath', outputPath);
+            await this.printImage(outputPath);
+            this.closeDevice();
+            console.log('打印完成');
+        });
+    }
+
+    async printCustomImage(imagePath) {
+        this.openDevice(async (printer) => {
+            console.log('📂 正在列印圖片:', imagePath);
+            await this.printImage(imagePath).catch(console.error);
+            this.closeDevice();
+            console.log('📷 圖片列印完成');
+        });
+    }
 }
 
-module.exports = ImagePrinter;
+module.exports = QRCodePrinter;

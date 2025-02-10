@@ -1,4 +1,4 @@
-const PrinterHandler = require('./PrinterHandler');
+const PrinterHandler = require('../core/PrinterHandler');
 const QRCodeUtils = require('../utils/QRCodeUtils');
 const InvoiceUtils = require('../utils/InvoiceUtils');
 const escpos = require('escpos');

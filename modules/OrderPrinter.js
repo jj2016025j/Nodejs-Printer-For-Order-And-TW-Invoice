@@ -1,4 +1,4 @@
-const PrinterHandler = require('./PrinterHandler');
+const PrinterHandler = require('../core/PrinterHandler');
 
 class OrderPrinter extends PrinterHandler {
   /**
