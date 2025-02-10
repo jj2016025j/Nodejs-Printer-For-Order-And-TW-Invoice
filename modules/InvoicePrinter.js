@@ -17,7 +17,7 @@ class InvoicePrinter extends PrinterHandler {
       const rightQRContent = `**:${invoiceData.selfUseArea}:${invoiceData.itemCount}:${invoiceData.itemCount}:${invoiceData.encoding}:${invoiceData.products}`;
       const barcodeContent = `${invoiceData.invoicePeriod}${invoiceData.invoiceNumber}${invoiceData.randomCode}`;
 
-      this.openDevice(async (printer) => {
+      await this.openDevice(async (printer) => {
         try {
           printer
           .font('a')
@@ -48,6 +48,7 @@ class InvoicePrinter extends PrinterHandler {
           // 這裡補一個列印qrcode圖片的方法 可以參考 InvoiceUtils 跟 QRCodePrinter 跟 QRCodeUtils
           await this.printQRCodeImage(invoiceData);
           await new Promise(resolve => setTimeout(resolve, 1000));
+          
           printer
             .cut()
             .font(`a`)
