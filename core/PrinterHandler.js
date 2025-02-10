@@ -1,8 +1,6 @@
 const escpos = require('escpos');
 escpos.USB = require('escpos-usb');
 const config = require('../config/PrinterConfig');
-const Jimp = require('jimp');
-const fs = require('fs'); //
 
 class PrinterHandler {
   constructor() {

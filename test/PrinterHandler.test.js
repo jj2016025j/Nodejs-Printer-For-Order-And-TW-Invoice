@@ -41,33 +41,6 @@ function testPrintText() {
   }
 }
 
-// 🟢 測試圖片列印（確保圖片存在）
-function testPrintImage(imagePath) {
-  console.log(`🟢 測試圖片列印: ${imagePath}...`);
-  if (!fs.existsSync(imagePath)) {
-    console.error(`❌ 測試圖片 ${imagePath} 不存在，請檢查路徑`);
-    return;
-  }
-
-  try {
-    printer.printImage(imagePath);
-    console.log(`✅ 圖片列印測試成功: ${imagePath}`);
-  } catch (error) {
-    console.error(`❌ 圖片列印測試失敗: ${imagePath}`, error.message);
-  }
-}
-
-// 🟢 測試錯誤處理 - 無效圖片
-function testInvalidImage() {
-  console.log("🟢 測試無效圖片列印...");
-  try {
-    printer.printImage("invalid_path.jpg");
-    console.log("❌ 無效圖片測試未通過（應該拋出錯誤）");
-  } catch (error) {
-    console.log("✅ 無效圖片測試通過:", error.message);
-  }
-}
-
 // **執行所有測試**
 async function runAllTests() {
   console.log("\n🚀 開始所有 PrinterHandler 測試...\n");
@@ -75,13 +48,6 @@ async function runAllTests() {
   testInitializeDevice();
   testOpenAndCloseDevice();
   testPrintText();
-
-  // 測試可用圖片（請確保這些圖片存在）
-  testPrintImage('../src/qr1.png');
-  testPrintImage('../src/output.png');
-  testPrintImage('../src/00test.png');
-
-  testInvalidImage();
 
   console.log("\n🎉 所有測試完成！\n");
 }

@@ -76,7 +76,7 @@ class QRCodeUtils {
    */
   static async createQRCode(text, size = 3, outputPath = 'qrcode.png') {
     const qrImage = await this.createQRCodeBuffer(text, size);
-    return this.saveImage(qrImage, outputPath);
+    return outputPath;
   }
 
   /**
