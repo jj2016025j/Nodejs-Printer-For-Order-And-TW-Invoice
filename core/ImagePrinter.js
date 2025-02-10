@@ -1,54 +1,75 @@
-// ImagePrinter.js
 const PrinterHandler = require('./PrinterHandler');
 const QRCodeUtils = require('../utils/QRCodeUtils');
-const escpos = require('escpos');
+const PrintUtils = require('../utils/PrintUtils');
+const escpos = require(`escpos`);
 
 class ImagePrinter extends PrinterHandler {
+    constructor() {
+        super(); // 繼承 PrinterHandler 的初始化
+    }
+
     /**
      * 列印 QR 碼圖片
+     * @param {string} data - QR Code 內容
+     * @param {number} size - QR Code 大小 (1~16)
+     * @param {boolean} cut - 是否切紙
      */
-    async printQRCodeImage(data, size = 5, cut = false) {
-        const qrImage = await QRCodeUtils.createQRCode(data, size);
-        const outputPath = 'qr_output.png';
-        await qrImage.writeAsync(outputPath);
-        this.openDevice((printer) => {
-            escpos.Image.load(outputPath, function (err, image) {
-                if (err) {
-                    console.error('載入 QR 碼圖片失敗:', err);
-                    return;
-                }
-                printer.raster(image);
+    async printQRCode(data, size = 3, cut = false) {
+        try {
+            const qrImage = await QRCodeUtils.createQRCodeBuffer(data, size);
+            this.openDevice(async (printer) => {
+                await PrintUtils.printImage(printer, qrImage);
                 if (cut) printer.cut();
-                printer.close();
-                console.log('QR 碼打印完成');
+                this.closeDevice();
+                console.log(`✅ QR 碼打印成功: ${data}`);
             });
-        });
+        } catch (error) {
+            console.error(`❌ QR 碼列印失敗: ${error.message}`);
+        }
     }
 
     /**
      * 列印合併雙 QR 碼圖片
+     * @param {string} leftQRData - 左側 QR Code 內容
+     * @param {string} rightQRData - 右側 QR Code 內容
+     * @param {number} size - QR Code 大小 (1~16)
+     * @param {number} spacing - QR Code 間距
+     * @param {boolean} cut - 是否切紙
      */
-    async printMergedQRCodeImage(leftQRData, rightQRData, size = 5, cut = false) {
-        const [qr1, qr2] = await Promise.all([
-            QRCodeUtils.createQRCode(leftQRData, size),
-            QRCodeUtils.createQRCode(rightQRData, size)
-        ]);
-        const mergedImage = await QRCodeUtils.mergeQRCodes(qr1, qr2);
-        const outputPath = 'merged_qr_output.png';
-        await mergedImage.writeAsync(outputPath);
-
-        this.openDevice((printer) => {
-            escpos.Image.load(outputPath, function (err, image) {
-                if (err) {
-                    console.error('載入合併 QR 碼圖片失敗:', err);
-                    return;
-                }
-                printer.raster(image);
+    async printMergedQRCode(leftQRData, rightQRData, size = 3, spacing = 0, cut = false) {
+        try {
+            const mergedQR = await QRCodeUtils.generateMergedQRCode(leftQRData, rightQRData, size, spacing);
+            this.openDevice(async (printer) => {
+                await PrintUtils.printImage(printer, mergedQR);
                 if (cut) printer.cut();
-                printer.close();
-                console.log('雙 QR 碼打印完成');
+                this.closeDevice();
+                console.log(`✅ 雙 QR 碼打印成功`);
             });
-        });
+        } catch (error) {
+            console.error(`❌ 雙 QR 碼列印失敗: ${error.message}`);
+        }
+    }
+
+    /**
+     * 列印圖片
+     * @param {string} imagePath - 圖片檔案路徑
+     * @param {boolean} cut - 是否切紙
+     */
+    async printImage(imagePath, cut = false) {
+        try {
+            this.openDevice(async (printer) => {
+                escpos.Image.load(imagePath, function (image) {
+                    printer
+                        .raster(image)
+                }
+                )
+                if (cut) printer.cut();
+                this.closeDevice();
+                console.log(`✅ 圖片打印成功: ${imagePath}`);
+            });
+        } catch (error) {
+            console.error(`❌ 圖片列印失敗 (${imagePath}): ${error.message}`);
+        }
     }
 }
 

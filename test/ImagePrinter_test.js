@@ -1,15 +1,14 @@
-
-// testQRCodePrinter.js
 const ImagePrinter = require('../core/ImagePrinter');
+
+// 初始化 ImagePrinter
 const imagePrinter = new ImagePrinter();
 
-async function testQRCodePrinting() {
+// 列印 QR Code
+imagePrinter.printQRCode("https://example.com", 4, true);
 
-    console.log('測試 QR 碼圖片列印');
-    await imagePrinter.printQRCodeImage('https://example.com', 5);
+// 列印雙 QR Code
+imagePrinter.printMergedQRCode("https://left.com", "https://right.com", 4, 10, true);
 
-    console.log('測試合併雙 QR 碼圖片列印');
-    await imagePrinter.printMergedQRCodeImage('https://example1.com', 'https://example2.com', 5);
-}
-
-testQRCodePrinting();
+// 列印本地圖片
+imagePrinter.printImage("C:\\Users\\User\\Github\\models\\printer\\src\\test_saved_qr.png", true);
+imagePrinter.printImage("C:\\Users\\User\\Github\\models\\printer\\src\\test.png", true);
