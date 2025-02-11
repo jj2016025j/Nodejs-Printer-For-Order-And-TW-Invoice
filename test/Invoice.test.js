@@ -1,7 +1,7 @@
 const InvoicePrinter = require('../modules/InvoicePrinter');
 
 const invoiceData = {
-  header: 'FangFood 芳鍋',
+  header: '實感生活',
   dateTime: '2024-03-18 11:22:33', // 確保符合 YYYY-MM-DD HH:mm:ss 格式
   invoicePeriod: '10404',
   invoiceNumber: 'AB-12345678',
@@ -11,7 +11,7 @@ const invoiceData = {
   tax: 10, // 10% VAT
   sellerId: '53589318',
   buyerId: '79461349',
-  companyInfo: '芳鍋企業有限公司',
+  companyInfo: '實感生活有限公司',
   address: '台北市信義區市府路1號',
   phone: '02-1234-5678',
   salesAmount: '00002710',

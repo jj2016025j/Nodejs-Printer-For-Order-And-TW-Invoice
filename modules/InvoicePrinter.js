@@ -3,7 +3,6 @@ const QRCodeUtils = require('../utils/QRCodeUtils');
 const InvoiceUtils = require('../utils/InvoiceUtils');
 const escpos = require('escpos');
 escpos.USB = require('escpos-usb');
-const Jimp = require('jimp');
 
 class InvoicePrinter extends PrinterHandler {
   /**
@@ -13,20 +12,15 @@ class InvoicePrinter extends PrinterHandler {
   async printInvoice(invoiceData) {
     try {
       // 產生 QR Code
-      const leftQRContent = `${invoiceData.invoiceNumber}:${invoiceData.date}:${invoiceData.randomCode}:${invoiceData.salesAmount}:${invoiceData.totalAmount}:${invoiceData.buyerId}:${invoiceData.sellerId}:${invoiceData.encryptionInfo}`;
-      const rightQRContent = `**:${invoiceData.selfUseArea}:${invoiceData.itemCount}:${invoiceData.itemCount}:${invoiceData.encoding}:${invoiceData.products}`;
       const barcodeContent = `${invoiceData.invoicePeriod}${invoiceData.invoiceNumber}${invoiceData.randomCode}`;
 
       await this.openDevice(async (printer) => {
         try {
           printer
-          .font('a')
-          .align('lt')
-          .size(1, 1)
           .font(`a`)
           .align(`lt`)
           .size(1, 1)
-          .text(invoiceData.header)
+          .text(`    ${invoiceData.header}`)
           .style(`b`)// 加粗
           .size(1, 1)
           .text(`電子發票證明聯`)
@@ -47,7 +41,6 @@ class InvoicePrinter extends PrinterHandler {
 
           // 這裡補一個列印qrcode圖片的方法 可以參考 InvoiceUtils 跟 QRCodePrinter 跟 QRCodeUtils
           await this.printQRCodeImage(invoiceData);
-          await new Promise(resolve => setTimeout(resolve, 1000));
           
           printer
             .cut()
@@ -85,16 +78,6 @@ class InvoicePrinter extends PrinterHandler {
     }
   }
 
-  async printDoubleQRCode(leftQRContent, rightQRContent) {
-    this.openDevice(async (printer) => {
-      const outputPath = await QRCodeUtils.generateMergedQRCodes(leftQRContent, rightQRContent).catch(console.error);
-      console.log('outputPath', outputPath);
-      await this.printImage(outputPath);
-      this.closeDevice();
-      console.log('打印完成');
-    });
-  }
-
   async printImage(imagePath) {
     return new Promise((resolve, reject) => {
       escpos.Image.load(imagePath, (image) => {
@@ -111,7 +94,7 @@ class InvoicePrinter extends PrinterHandler {
       // 產生 QR Code 內容
       const leftQRContent = `${invoiceData.invoiceNumber}:${invoiceData.date}:${invoiceData.randomCode}:${invoiceData.salesAmount}:${invoiceData.totalAmount}:${invoiceData.buyerId}:${invoiceData.sellerId}:${invoiceData.encryptionInfo}`;
       const rightQRContent = `**:${invoiceData.selfUseArea}:${invoiceData.itemCount}:${invoiceData.itemCount}:${invoiceData.encoding}:${invoiceData.products}`;
-      
+
       // 產生合併 QR Code 圖片
       const outputPath = await QRCodeUtils.generateMergedQRCodes(leftQRContent, rightQRContent);
       console.log('QR Code 產生完成，路徑:', outputPath);
@@ -120,8 +103,6 @@ class InvoicePrinter extends PrinterHandler {
         try {
           // 列印 QR Code 圖片
           await this.printImage(outputPath);
-          printer.cut();
-          printer.close();
           console.log('✅ QR Code 圖片列印完成');
         } catch (error) {
           console.error('❌ QR Code 圖片列印失敗:', error);
