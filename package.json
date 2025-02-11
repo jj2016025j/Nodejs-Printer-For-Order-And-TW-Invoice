@@ -1,13 +1,18 @@
 {
-  "name": "nodejs",
+  "name": "nodejs-printer-tw-invoice",  
   "version": "1.0.0",
+  "description": "A module for printing invoices and QR codes.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon printer.js"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jj2016025j/Nodejs-Printer-TW-Invoice.git"
+  },
+  "keywords": ["printer", "invoice", "qrcode", "nodejs"],
+  "author": "jj2016025j",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",
@@ -38,6 +43,5 @@
     "thermal-printer": "^1.0.5",
     "twilio": "^4.23.0",
     "usb": "^2.12.1"
-  },
-  "description": ""
+  }
 }
