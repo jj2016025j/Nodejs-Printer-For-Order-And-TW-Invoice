@@ -51,10 +51,12 @@ class PrinterHandler {
    * 列印純文字
    * @param {string} text - 要列印的文字
    */
-  printText(text, cut = false) {
+  printText(text = "預設內容", cut = false) {
     this.openDevice((printer) => {
-      printer.text(text);
-      printer.feed(2);
+      printer
+      .size(0)
+      .text(text)
+      .feed(2);
       if (cut) printer.cut();
       printer.close();
       console.log('✅ 文字列印完成');

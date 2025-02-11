@@ -55,26 +55,14 @@ class QRCodePrinter extends PrinterHandler {
     /**
      * 直接列印兩個並排的 QR 碼（ESC/POS 指令） 應該會變成兩行?
      */
-    printDualQRCodeRaw(leftQRData, rightQRData, size = 4, cut = false) {
+    printDualQRCodeRaw(content, size = 4, cut = false) {
         this.openDevice((printer) => {
             printer.align('lt'); // 左對齊
-            printer.qrimage(leftQRData, { type: 'png', size }, (err) => {
-                if (err) {
-                    console.error('打印左側 QR 碼失敗:', err);
-                    return;
-                }
-                printer.text(' '.repeat(4)); // 增加間距
-                printer.align('rt'); // 右對齊
-                printer.qrimage(rightQRData, { type: 'png', size }, (err) => {
-                    if (err) {
-                        console.error('打印右側 QR 碼失敗:', err);
-                        return;
-                    }
-                    printer.feed(2);
-                    if (cut) printer.cut();
-                    printer.close();
-                    console.log('QR 碼打印完成');
-                });
+            printer.qrimage(content, { type: 'png', size }, (err) => {
+                printer.feed(2);
+                if (cut) printer.cut();
+                printer.close();
+                console.log('QR 碼打印完成');
             });
         });
     }

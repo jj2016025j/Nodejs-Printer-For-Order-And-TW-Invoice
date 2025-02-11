@@ -1,44 +1,15 @@
 const PrinterHandler = require('../core/PrinterHandler');
-const fs = require('fs');
 
 console.log("🔍 開始測試 PrinterHandler...");
 
 const printer = new PrinterHandler();
 
-// 🟢 測試設備初始化
-function testInitializeDevice() {
-  console.log("🟢 測試設備初始化...");
-  try {
-    printer.device; // 這行執行應該不會報錯
-    console.log("✅ 設備初始化成功");
-  } catch (error) {
-    console.error("❌ 設備初始化失敗:", error.message);
-  }
-}
+printer.device; // 這行執行應該不會報錯
 
-// 🟢 測試開啟設備與關閉設備
-function testOpenAndCloseDevice() {
-  console.log("🟢 測試開啟設備與關閉設備...");
-  try {
-    printer.openDevice(() => {
-      console.log("✅ 設備成功開啟");
-      printer.closeDevice();
-      console.log("✅ 設備成功關閉");
-    });
-  } catch (error) {
-    console.error("❌ 設備開啟/關閉失敗:", error.message);
-  }
-}
+console.log("🟢 測試開啟設備與關閉設備...");
+printer.openDevice(() => {
+  printer.closeDevice();
+});
 
-// **執行所有測試**
-async function runAllTests() {
-  console.log("\n🚀 開始所有 PrinterHandler 測試...\n");
-
-  testInitializeDevice();
-  testOpenAndCloseDevice();
-
-  console.log("\n🎉 所有測試完成！\n");
-}
-
-runAllTests();
-
+console.log("🟢 測試基本文字打印...");
+printer.printText("測試基本文字打印..."); // 這行執行應該不會報錯
