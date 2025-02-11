@@ -25,7 +25,5 @@ const invoiceData = {
   ],
 };
 
-module.exports = invoiceData;
-
 const printer = new InvoicePrinter();
 printer.printInvoice(invoiceData);
