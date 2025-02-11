@@ -17,21 +17,21 @@ class InvoicePrinter extends PrinterHandler {
       await this.openDevice(async (printer) => {
         try {
           printer
-            // .font(`a`)
-            // .align(`lt`)
-            // .size(1, 1)
-            // .text(`    ${invoiceData.header}`)
-            // .style(`b`)// 加粗
-            // .size(1, 1)
-            // .text(`電子發票證明聯`)
-            // .size(1, 1)
-            // .text(` ${InvoiceUtils.convertInvoicePeriod(invoiceData.invoicePeriod)}`)
-            // .text(` ${invoiceData.invoiceNumber}`)
-            // .style(`NORMAL`)
-            // .size(0, 0)
-            // .text(`     ${invoiceData.dateTime}`)
-            // .text(InvoiceUtils.fillSpaces(`隨機碼:${invoiceData.randomCode}`, `總計${invoiceData.totalAmount}`, 22))
-            // .text(InvoiceUtils.fillSpaces(`賣方:${invoiceData.sellerId}`, `買方:${invoiceData.buyerId}`, 22))
+            .font(`a`)
+            .align(`lt`)
+            .size(1, 1)
+            .text(`    ${invoiceData.header}`)
+            .style(`b`)// 加粗
+            .size(1, 1)
+            .text(`電子發票證明聯`)
+            .size(1, 1)
+            .text(` ${InvoiceUtils.convertInvoicePeriod(invoiceData.invoicePeriod)}`)
+            .text(` ${invoiceData.invoiceNumber}`)
+            .style(`NORMAL`)
+            .size(0, 0)
+            .text(`     ${invoiceData.dateTime}`)
+            .text(InvoiceUtils.fillSpaces(`隨機碼:${invoiceData.randomCode}`, `總計${invoiceData.totalAmount}`, 22))
+            .text(InvoiceUtils.fillSpaces(`賣方:${invoiceData.sellerId}`, `買方:${invoiceData.buyerId}`, 22))
 
             .barcode(barcodeContent, `CODE39`, {
               width: 30,
@@ -44,31 +44,31 @@ class InvoicePrinter extends PrinterHandler {
           // 電腦快一點的可以減少到50或更低
           await new Promise(resolve => setTimeout(resolve, 100));
 
-          // printer
-          //   .cut()
-          //   .font(`a`)
-          //   .align(`lt`)
-          //   .size(0, 0)
-          //   .text(`公司: ${invoiceData.companyInfo}`)
-          //   .style(`NORMAL`)
-          //   .text(`發票編號: ${invoiceData.invoiceNumber}`)
-          //   .text(`開票日期: ${InvoiceUtils.formatInvoiceDate(invoiceData.dateTime)}`)
-          //   .text(`統一編號: ${invoiceData.buyerId}`)
-          //   .text(`地址: ${invoiceData.address}`)
-          //   .text(`電話: ${invoiceData.phone}`)
-          //   .feed(1)
-          //   .text(`商品: `)
+          printer
+            .cut()
+            .font(`a`)
+            .align(`lt`)
+            .size(0, 0)
+            .text(`公司: ${invoiceData.companyInfo}`)
+            .style(`NORMAL`)
+            .text(`發票編號: ${invoiceData.invoiceNumber}`)
+            .text(`開票日期: ${InvoiceUtils.formatInvoiceDate(invoiceData.dateTime)}`)
+            .text(`統一編號: ${invoiceData.buyerId}`)
+            .text(`地址: ${invoiceData.address}`)
+            .text(`電話: ${invoiceData.phone}`)
+            .feed(1)
+            .text(`商品: `)
 
           // **逐行列印商品明細**
           this.printInvoiceItems(printer, invoiceData.products);
 
           printer
-            // .feed(2)
-            // .text(`商品總額: ${invoiceData.subTotal}`)
-            // .text(`加值稅(10%): ${invoiceData.tax}`)
-            // .text(`總計: ${invoiceData.total}`)
-            // .feed(2)
-            // .flush()
+            .feed(2)
+            .text(`商品總額: ${invoiceData.subTotal}`)
+            .text(`加值稅(10%): ${invoiceData.tax}`)
+            .text(`總計: ${invoiceData.total}`)
+            .feed(2)
+            .flush()
             .close();
 
           console.log('✅ 發票打印完成');
